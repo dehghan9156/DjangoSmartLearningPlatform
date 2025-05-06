@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {#{% extends "account/base_entrance.html" %}#}
+{% load static %} <!-- این خط باید در بالای فایل باشد -->
 {% load i18n %}
 {% load allauth account %}
 
@@ -8,84 +9,8 @@
 {% endblock head_title %}
 
 {% block content %}
-    <style>
-        /* استایل‌های صفحه */
-        body {
-            background-color: #f4f7fa;
-            font-family: 'Arial', sans-serif;
-        }
 
-        .login-container {
-            max-width: 400px;
-            margin: 50px auto;
-            padding: 50px;
-            background-color: #ffffff;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        .login-container h1 {
-            text-align: center;
-            margin-bottom: 20px;
-            color: #333;
-        }
-
-        .custom-input {
-            margin-bottom: 20px;
-        }
-
-        .custom-input input {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid #ccc;
-            border-radius: 8px;
-            font-size: 16px;
-            transition: all 0.3s;
-        }
-
-        .custom-input input:focus {
-            border-color: #4CAF50;
-            outline: none;
-        }
-
-        .custom-btn {
-            width: 100%;
-            background-color: #4CAF50;
-            color: white;
-            padding: 12px 0;
-            border-radius: 8px;
-            border: none;
-            font-size: 16px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .custom-btn:hover {
-            background-color: #45a049;
-        }
-
-        .link-text {
-            text-align: center;
-            margin-top: 15px;
-            font-size: 14px;
-        }
-
-        .link-text a {
-            color: #4CAF50;
-            text-decoration: none;
-        }
-
-        .link-text a:hover {
-            text-decoration: underline;
-        }
-
-        .form-footer {
-            text-align: center;
-            margin-top: 20px;
-        }
-
-    </style>
-
+<link rel="stylesheet" href="{% static 'css/login.css' %}">
     <div class="login-container">
         {% element h1 %}
             {% trans "Sign In" %}
