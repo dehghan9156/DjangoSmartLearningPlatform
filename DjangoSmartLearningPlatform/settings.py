@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
     'social_django',  # اضافه کردن این خط برای پشتیبانی از Google OAuth
+    'learning',
 ]
 
 MIDDLEWARE = [
@@ -154,3 +155,6 @@ SOCIALACCOUNT_PROVIDERS = {
         'OAUTH_PKCE_ENABLED': True,
     }
 }
+
+AUTH_USER_MODEL = 'accounts.CustomUser'
+
