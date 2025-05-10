@@ -7,10 +7,12 @@
 }
 
 body {
-    font-family: 'Nunito', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-family: 'Vazir', 'Nunito', sans-serif; /* فونت فارسی اولویت دارد */
     color: var(--text-color);
     background-color: #f8f9fc;
     line-height: 1.6;
+    direction: rtl; /* راست‌چین کردن متن */
+    text-align: right; /* برای اطمینان از راست‌چین بودن متن */
 }
 
 /* هدر و نوبار */

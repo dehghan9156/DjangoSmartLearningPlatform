@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% block content %}
+
+    <div class="container mt-5">
+        <h2 class="mb-4 text-left">📚 My Notes</h2>
+
+        <div class="row">
+            {% for note in notes %}
+                <div class="col-md-6 mb-4">
+                    <div class="card shadow-sm">
+                        <div class="card-body">
+                            <h5 class="card-title text-primary">{{ note.title }}</h5>
+                            <p class="card-text">{{ note.content }}</p>
+                            <p class="text-muted" style="font-size: 0.9rem;">
+                                🕒 {{ note.created_date|date:"Y-m-d H:i" }}</p>
+                        </div>
+                        <div class="row no-gutters">
+                            <div class="col-6">
+                                <a href="#"
+                                   class="btn btn-primary w-100 rounded-0">Update</a>
+                            </div>
+                            <div class="col-6">
+                                <a href="#"
+                                   class="btn btn-danger w-100 rounded-0">Delete</a>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            {% empty %}
+                <div class="col-12">
+                    <div class="alert alert-info text-center">
+                        No notes have been added yet 😊
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+{% endblock %}
