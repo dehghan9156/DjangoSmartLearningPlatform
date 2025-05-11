@@ -31,3 +31,26 @@ class NoteListView(View,LoginRequiredMixin):
         if notes.exists():
             return render(request,"learning/note-list.html",{"notes":notes})
         return render(request,"learning/note-list.html",{"messages":"There are no notes for you."})
+
+class NoteDeleteView(View,LoginRequiredMixin):
+    def get(self,request,pk):
+        note = Note.objects.get(pk=pk)
+        note.delete()
+        messages.success(request,"your note has successfully.","success")
+        return redirect("learning:note-list")
+
+class NoteUpdateView(View,LoginRequiredMixin):
+    def get(self,request,pk):
+        note = Note.objects.get(pk=pk)
+        form = NoteForm(instance=note)
+        return render(request,"learning/note-update.html",{"form":form})
+    def post(self,request,pk):
+        note = Note.objects.get(pk=pk)
+        form = NoteForm(request.POST,instance=note)
+        if form.is_valid():
+            form.save()
+            messages.success(request,"your note updated successfully",'success')
+            return redirect("learning:note-list")
+        messages.error(request, "your form is not valid.", 'danger')
+        return render(request,"learning/note-update.html",{"form":form})
+

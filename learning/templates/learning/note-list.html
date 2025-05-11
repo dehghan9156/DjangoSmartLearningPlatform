@@ -1,30 +1,32 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block content %}
-
+    <link rel="stylesheet" href="{% static 'learning/css/note-list.css' %}">
     <div class="container mt-5">
-        <h2 class="mb-4 text-left">📚 My Notes</h2>
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="mb-0">📚 My Notes</h2>
+            <a href="{% url "learning:note-add" %}" class="btn btn-success">
+                ➕ Add Note
+            </a>
+        </div>
 
         <div class="row">
             {% for note in notes %}
                 <div class="col-md-6 mb-4">
-                    <div class="card shadow-sm">
+                    <div class="card shadow-sm note-card">
                         <div class="card-body">
                             <h5 class="card-title text-primary">{{ note.title }}</h5>
-                            <p class="card-text">{{ note.content }}</p>
+                            <p class="card-text note-content">{{ note.content }}</p>
                             <p class="text-muted" style="font-size: 0.9rem;">
-                                🕒 {{ note.created_date|date:"Y-m-d H:i" }}</p>
+                                🕒 {{ note.created_date|date:"Y-m-d H:i" }}
+                            </p>
                         </div>
-                        <div class="row no-gutters">
-                            <div class="col-6">
-                                <a href="#"
-                                   class="btn btn-primary w-100 rounded-0">Update</a>
-                            </div>
-                            <div class="col-6">
-                                <a href="#"
-                                   class="btn btn-danger w-100 rounded-0">Delete</a>
-                            </div>
+                        <div class="d-flex" style="gap: 4px;">
+                            <a href="{% url 'learning:note-update' note.pk %}"
+                               class="btn btn-primary flex-fill">Update</a>
+                            <a href="{% url 'learning:note-delete' note.pk %}"
+                               class="btn btn-danger flex-fill">Delete</a>
                         </div>
-
                     </div>
                 </div>
             {% empty %}
