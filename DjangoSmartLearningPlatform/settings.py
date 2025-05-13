@@ -161,10 +161,14 @@ SOCIALACCOUNT_PROVIDERS = {
 AUTH_USER_MODEL = 'accounts.CustomUser'
 
 
-ASGI_APPLICATION = 'DjangoSmartLearningPlatform.asgi.application'
+
+ASGI_APPLICATION = "DjangoSmartLearningPlatform.asgi.application"
 
 CHANNEL_LAYERS = {
-    'default': {
-        'BACKEND': 'channels.layers.InMemoryChannelLayer',
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("127.0.0.1", 6379)],
+        },
     },
 }
