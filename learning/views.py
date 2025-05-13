@@ -54,3 +54,6 @@ class NoteUpdateView(View,LoginRequiredMixin):
         messages.error(request, "your form is not valid.", 'danger')
         return render(request,"learning/note-update.html",{"form":form})
 
+class TestView(View):
+    def get(self,request):
+        return render(request, 'learning/websocket.html')

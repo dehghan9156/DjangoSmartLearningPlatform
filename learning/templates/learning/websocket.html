@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Learning Chat</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #7B2CBF;
+        }
+
+        #chatBox {
+            width: 100%;
+            max-width: 500px;
+            height: 400px;
+            border: 1px solid #e0e0e0;
+            background-color: #fafafa;
+            border-radius: 12px;
+            padding: 15px;
+            overflow-y: scroll;
+            box-shadow: 0 2px 8px rgba(123, 44, 191, 0.1);
+        }
+
+        .message {
+            margin: 10px 0;
+            padding: 10px 16px;
+            border-radius: 20px;
+            max-width: 80%;
+            display: inline-block;
+            clear: both;
+            font-size: 15px;
+            line-height: 1.4;
+        }
+
+        .user {
+            background-color: #7B2CBF;
+            color: white;
+            float: right;
+            text-align: right;
+        }
+
+        .server {
+            background-color: #e9e9f0;
+            color: #333;
+            float: left;
+            text-align: left;
+        }
+
+        #messageInput {
+            width: 70%;
+            max-width: 400px;
+            padding: 10px;
+            margin-top: 15px;
+            border-radius: 10px;
+            border: 1px solid #ccc;
+        }
+
+        #sendButton {
+            padding: 10px 20px;
+            margin-top: 15px;
+            border: none;
+            background-color: #7B2CBF;
+            color: white;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        #sendButton:hover {
+            background-color: #5a189a;
+        }
+    </style>
+</head>
+<body>
+<h1>Learning Chat</h1>
+
+<div id="chatBox"></div>
+
+<input id="messageInput" type="text" placeholder="Type a message..."/>
+<button id="sendButton">Send</button>
+
+<script>
+    const socket = new WebSocket('ws://127.0.0.1:8000/ws/learning/');
+const chatBox = document.getElementById('chatBox');
+let lastSentMessage = '';
+
+socket.onmessage = function (e) {
+    const data = JSON.parse(e.data);
+    const message = data.message;
+
+    // اگر پیام دریافتی همان پیام ارسالی خودمان نبود، نمایش بده
+    if (message !== lastSentMessage) {
+        const msg = document.createElement('div');
+        msg.classList.add('message', 'server');
+        msg.textContent = message;
+        chatBox.appendChild(msg);
+        chatBox.scrollTop = chatBox.scrollHeight;
+    }
+    // ریست کن که پیام بعدی دوباره مقایسه نشه
+    lastSentMessage = '';
+};
+
+document.getElementById('sendButton').onclick = function () {
+    const input = document.getElementById('messageInput');
+    const message = input.value;
+
+    if (socket.readyState === WebSocket.OPEN && message.trim() !== '') {
+        lastSentMessage = message;
+
+        const msg = document.createElement('div');
+        msg.classList.add('message', 'user');
+        msg.textContent = message;
+        chatBox.appendChild(msg);
+        chatBox.scrollTop = chatBox.scrollHeight;
+
+        socket.send(JSON.stringify({'message': message}));
+        input.value = '';
+    }
+};
+
+</script>
+</body>
+</html>

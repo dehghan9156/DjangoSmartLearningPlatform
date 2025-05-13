@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.google',
     'social_django',  # اضافه کردن این خط برای پشتیبانی از Google OAuth
     'learning',
+    'channels',
 ]
 
 MIDDLEWARE = [
@@ -158,3 +159,12 @@ SOCIALACCOUNT_PROVIDERS = {
 }
 
 AUTH_USER_MODEL = 'accounts.CustomUser'
+
+
+ASGI_APPLICATION = 'DjangoSmartLearningPlatform.asgi.application'
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels.layers.InMemoryChannelLayer',
+    },
+}
