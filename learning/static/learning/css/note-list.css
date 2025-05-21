@@ -1,11 +1,36 @@
 .note-card {
-    height: 100%;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    height: 100%;
+    position: relative;
 }
 
 .note-content {
-    min-height: 120px; /* اینو می‌تونی بر اساس نیازت کم یا زیاد کنی */
+    direction: ltr;
+    text-align: left;
+    font-family: 'Segoe UI', sans-serif;
+    white-space: pre-line;
+    text-indent: 0;
+    margin: 0;
+    padding: 0;
+    line-height: 1.7;
+    overflow-wrap: break-word;
 }
+
+.rtl-text {
+    direction: rtl;
+    text-align: right;
+    font-family: 'Vazirmatn', 'Tahoma', sans-serif;
+}
+
+.note-date-box {
+    font-size: 0.85rem;
+    color: #6c757d;
+    /*border-top: 1px solid #eee;*/
+
+    text-align: left;
+    direction: ltr;  /* 🔥 این خط خیلی مهمه برای غلبه بر RTL والد */
+    margin-top: 25px;
+}
+
 

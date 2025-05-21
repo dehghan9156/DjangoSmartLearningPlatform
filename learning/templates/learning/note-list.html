@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load text_filters %}
 {% block content %}
     <link rel="stylesheet" href="{% static 'learning/css/note-list.css' %}">
     <div class="container mt-5">
@@ -16,17 +17,24 @@
                     <div class="card shadow-sm note-card">
                         <div class="card-body">
                             <h5 class="card-title text-primary">{{ note.title }}</h5>
-                            <p class="card-text note-content">{{ note.content }}</p>
-                            <p class="text-muted" style="font-size: 0.9rem;">
+                            <p class="note-content {% if note.content|is_farsi %}rtl-text{% endif %}">
+                                {{ note.content|truncatewords:50 }}</p>
+
+                            <div class="note-date-box">
                                 🕒 {{ note.created_date|date:"Y-m-d H:i" }}
-                            </p>
+                            </div>
                         </div>
                         <div class="d-flex" style="gap: 4px;">
                             <a href="{% url 'learning:note-update' note.pk %}"
-                               class="btn btn-primary flex-fill">Update</a>
+                               class="btn btn-primary flex-fill">Edit</a>
                             <a href="{% url 'learning:note-delete' note.pk %}"
                                class="btn btn-danger flex-fill">Delete</a>
+                            <a href="{% url 'learning:summary-gpt' note.pk %}"
+                               class="btn btn-warning flex-fill">Summary</a>
+                            <a href="{% url "learning:note-question-gpt" note.pk %}" class="btn btn-info flex-fill">
+                                Ask For AI🧠</a>
                         </div>
+
                     </div>
                 </div>
             {% empty %}

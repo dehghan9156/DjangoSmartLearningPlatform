@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% load text_filters %}
+{% block content %}
+    <style>
+        .rtl-text {
+            direction: rtl;
+            text-align: right;
+            font-family: 'Vazirmatn', 'Tahoma', sans-serif;
+            line-height: 1.7;
+        }
+
+    </style>
+    <div class="container mt-5">
+        {% if note %}
+            <h2 class="mb-3">📝 {{ note.title }}</h2>
+           <div class="alert alert-secondary {% if note.content|is_farsi %}rtl-text{% endif %}" style="white-space: pre-line; overflow-wrap: break-word;">
+    <strong>Original Content:</strong><br>
+    {{ note.content }}
+</div>
+
+<div class="alert alert-info {% if summary|is_farsi %}rtl-text{% endif %} " style="white-space: pre-line; overflow-wrap: break-word;">
+    <strong>AI Summary:</strong><br>
+    {{ summary }}
+</div>
+
+            <a href="{% url 'learning:note-list' %}" class="btn btn-secondary">Back to Notes</a>
+        {% else %}
+            <div class="alert alert-warning">No note selected for summarization.</div>
+        {% endif %}
+    </div>
+{% endblock %}

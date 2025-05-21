@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% load static %}
+{% load text_filters %}
+{% block content %}
+    <link rel="stylesheet" href="{% static 'learning/css/note-list.css' %}">
+
+    <div class="container mt-5">
+        <div class="card shadow p-4">
+            <!-- نمایش یادداشت -->
+{#            <div class="mb-4">#}
+{#                <h5 class="text-secondary mb-2">📝 Note:</h5>#}
+{#                <div class="border rounded bg-light p-3"#}
+{#                     style="white-space: pre-line; color: black; background-color: #f8f9fa;">#}
+{#                    <code>{{ note.content|default:"[No content]" }}</code>#}
+{#                </div>#}
+{#            </div>#}
+
+            <!-- عنوان فرم -->
+            <h4 class="text-primary mb-3">🧠 Ask a Question About This Note</h4>
+
+            <!-- فرم ارسال سوال -->
+            <form method="post" novalidate>
+                {% csrf_token %}
+                <div class="form-group mb-3{% if note.content|is_farsi %}rtl-text{% endif %}">
+                    {{ form.as_p }}
+                    {% if form.question.errors %}
+                        <div class="text-danger mt-1">
+                            {{ form.question.errors }}
+                        </div>
+                    {% endif %}
+                </div>
+                <button type="submit" class="btn btn-success">
+                    🚀 Send Question
+                </button>
+            </form>
+
+            <!-- نمایش پاسخ -->
+            {% if answer %}
+                <div class="mt-4">
+                    <h5 class="text-info">✅ Answer:</h5>
+                    <div class="border rounded bg-white p-3{% if note.content|is_farsi %}rtl-text{% endif %}"
+                         style="white-space: pre-line;">
+                        {{ answer }}
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

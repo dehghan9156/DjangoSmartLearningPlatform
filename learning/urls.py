@@ -9,5 +9,7 @@ urlpatterns = [
     path("note/delete/<int:pk>/",views.NoteDeleteView.as_view(),name="note-delete"),
     path("note/update/<int:pk>/",views.NoteUpdateView.as_view(),name="note-update"),
     path("test/",views.TestView.as_view(),name="test"),
+    path("summary/gpt/<int:pk>/",views.GptSummaryView.as_view(),name="summary-gpt"),
+    path("note/question/gpt/<int:pk>/",views.GptNotQuestionView.as_view(),name="note-question-gpt")
 ]
 
