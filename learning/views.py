@@ -6,6 +6,8 @@ from django.contrib import messages
 from django.views import View
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
+
+from DjangoSmartLearningPlatform.settings import OPENAI_API_KEY
 from .forms import *
 from .models import *
 import requests
@@ -86,7 +88,7 @@ class GptSummaryView(View):
 
     def call_deepseek(self, prompt):
         url = "https://api.openai.com/v1/chat/completions"
-        api_key = "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"
+        api_key = OPENAI_API_KEY
         headers = {
             "Authorization": f"Bearer {api_key}",
             "Content-Type": "application/json"
@@ -127,7 +129,7 @@ class GptNotQuestionView(View):
 
     def call_deepseek(self, question, prompt):
         url = "https://api.openai.com/v1/chat/completions"
-        api_key = "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"
+        api_key = OPENAI_API_KEY
         headers = {
             "Authorization": f"Bearer {api_key}",
             "Content-Type": "application/json"
