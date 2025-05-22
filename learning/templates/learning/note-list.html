@@ -17,8 +17,11 @@
                     <div class="card shadow-sm note-card">
                         <div class="card-body">
                             <h5 class="card-title text-primary">{{ note.title }}</h5>
-                            <p class="note-content {% if note.content|is_farsi %}rtl-text{% endif %}">
-                                {{ note.content|truncatewords:50 }}</p>
+                            <a href="{% url "learning:note-detail" note.pk %}" style="text-decoration: none; color: black;">
+
+                                <p class="note-content {% if note.content|is_farsi %}rtl-text{% endif %}">
+                                    {{ note.content|truncatewords:50 }}</p>
+                            </a>
 
                             <div class="note-date-box">
                                 🕒 {{ note.created_date|date:"Y-m-d H:i" }}

@@ -163,3 +163,8 @@ class GptNotQuestionView(View):
                 return "⚠️ Unexpected response from DeepSeek."
         except Exception as e:
             return f"❌ Error communicating with DeepSeek: {str(e)}"
+
+class NoteDetailView(View):
+    def get(self,request,pk):
+        note = Note.objects.get(pk=pk)
+        return render(request,"learning/note-detail.html",{"note":note})

@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load text_filters %}  {# اگر فیلتر is_farsi داری برای تشخیص فارسی بودن #}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'learning/css/note-detail.css' %}">
+
+<div class="container mt-5">
+    <div class="card shadow-sm p-4">
+        <h2 class="mb-4 text-primary">{{ note.title }}</h2>
+        <div class="note-detail-content {% if note.content|is_farsi %}rtl-text{% else %}ltr-text{% endif %}">
+            {{ note.content|linebreaks }}
+        </div>
+    </div>
+</div>
+{% endblock %}

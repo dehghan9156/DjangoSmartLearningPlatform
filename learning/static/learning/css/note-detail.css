@@ -1,0 +1,18 @@
+.note-detail-content {
+    font-family: 'IRANSans', 'Vazirmatn', 'Tahoma', sans-serif;
+    font-size: 1.1rem;
+    line-height: 1.9;
+    color: #333;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+.rtl-text {
+    direction: rtl;
+    text-align: right;
+}
+
+.ltr-text {
+    direction: ltr;
+    text-align: left;
+}
