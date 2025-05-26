@@ -1,0 +1,41 @@
+# فایل‌های پایتون کامپایل‌شده
+__pycache__/
+*.py[cod]
+*$py.class
+
+# محیط مجازی
+env/
+venv/
+
+# فایل‌های SQLite دیتابیس (اگه استفاده می‌کنی)
+*.sqlite3
+
+# فایل‌های migration که ممکنه بخوای ignore کنی (اختیاری)
+*/migrations/__pycache__/
+*/migrations/*.pyc
+
+# فایل‌های محیطی و حساس
+.env
+
+# فایل‌های خروجی یا لاگ‌ها
+*.log
+*.pot
+*.pyc
+
+# فایل‌های سیستم‌عامل
+.DS_Store
+Thumbs.db
+
+# VSCode و PyCharm
+.vscode/
+.idea/
+
+# فایل‌های cache و تست
+.cache/
+coverage/
+htmlcov/
+
+# فایل‌های اجرایی و lock
+*.lock
+*.bak
+*.tmp

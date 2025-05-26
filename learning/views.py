@@ -12,7 +12,8 @@ from .forms import *
 from .models import *
 import requests
 from django.http import JsonResponse
-
+from django.conf import settings
+import openai
 
 class NoteAddView(View, LoginRequiredMixin):
     def get(self, request):
@@ -88,7 +89,7 @@ class GptSummaryView(View):
 
     def call_deepseek(self, prompt):
         url = "https://api.openai.com/v1/chat/completions"
-        api_key = OPENAI_API_KEY
+        api_key = settings.OPENAI_API_KEY
         headers = {
             "Authorization": f"Bearer {api_key}",
             "Content-Type": "application/json"
