@@ -11,6 +11,7 @@ urlpatterns = [
     path("test/",views.TestView.as_view(),name="test"),
     path("summary/gpt/<int:pk>/",views.GptSummaryView.as_view(),name="summary-gpt"),
     path("note/question/gpt/<int:pk>/",views.GptNotQuestionView.as_view(),name="note-question-gpt"),
-    path("note/detail/<int:pk>/",views.NoteDetailView.as_view(),name="note-detail")
+    path("note/detail/<int:pk>/",views.NoteDetailView.as_view(),name="note-detail"),
+    path("note/create/question/<int:pk>/",views.NoteCreateQuestionbyGptView.as_view(),name="create-question-by-gpt")
 ]
 

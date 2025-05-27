@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block content %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'learning/css/note-question-by-gpt.css' %}">
+<div class="question-container">
+    <h2 class="question-title">🧠Create Question By GPT</h2>
+
+    {% if question_list %}
+        <form method="post">
+            {% csrf_token %}
+            {% for q in question_list %}
+                <div class="question-box">
+                    <div class="question-line">📌 {{ q }}</div>
+                    <textarea class="answer-box" name="answer_{{ forloop.counter }}"></textarea>
+                </div>
+                <hr>
+            {% endfor %}
+            <button type="submit" class="submit-btn">Submit Answers</button>
+        </form>
+    {% else %}
+        <p class="no-question">❗Yet No Create Question</p>
+    {% endif %}
+</div>
+{% endblock %}

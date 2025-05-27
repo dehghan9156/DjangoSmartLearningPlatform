@@ -1,18 +1,29 @@
+@import url('https://fonts.googleapis.com/css2?family=Vazirmatn&display=swap');
+
 .note-detail-content {
-    font-family: 'IRANSans', 'Vazirmatn', 'Tahoma', sans-serif;
-    font-size: 1.1rem;
-    line-height: 1.9;
+    font-family: 'Vazirmatn', sans-serif;
+    font-size: 1.05rem;
+    line-height: 1.6;
     color: #333;
     white-space: pre-wrap;
     word-break: break-word;
+    direction: rtl;
+    text-align: right;
+}
+
+.note-detail-content p,p {
+    margin-bottom: 0.8rem;
+    text-indent: 0;
 }
 
 .rtl-text {
     direction: rtl;
     text-align: right;
+    font-family: 'Vazirmatn', sans-serif;
 }
 
 .ltr-text {
     direction: ltr;
     text-align: left;
+    font-family: 'Vazirmatn', sans-serif;
 }

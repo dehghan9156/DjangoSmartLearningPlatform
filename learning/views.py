@@ -121,10 +121,9 @@ class GptNotQuestionView(View):
     def post(self, request, pk):
         form = QuestionNoteForm(request.POST)
         answer = None
+        note = Note.objects.get(pk=pk)
         if form.is_valid():
             question = form.cleaned_data["question"]
-            note = Note.objects.get(pk=pk)
-            print(note.pk)
             answer = self.call_deepseek(question, note.content)
         return render(request, "learning/note-question-gpt.html", {"form": form, "answer": answer, "note": note})
 
@@ -169,3 +168,48 @@ class NoteDetailView(View):
     def get(self,request,pk):
         note = Note.objects.get(pk=pk)
         return render(request,"learning/note-detail.html",{"note":note})
+
+class NoteCreateQuestionbyGptView(View):
+    def post(self,request,pk):
+        note = Note.objects.get(pk=pk)
+        prompt = note.content
+        question_text = self.call_deepseek(prompt)
+        question_list = question_text.split("\n")
+        # print("question",question_list)
+        return render(request,"learning/note-question-by-gpt.html",{"question_list":question_list})
+
+    def call_deepseek(self,prompt):
+        url = "https://api.openai.com/v1/chat/completions"
+        api_key = OPENAI_API_KEY
+        headers = {
+            "Authorization": f"Bearer {api_key}",
+            "Content-Type": "application/json"
+        }
+        data = {
+            "model": "gpt-4o-mini",
+            "messages": [{
+                "role": "user",
+                "content": f"""The following is a user note:
+                    ---
+                    {prompt}
+                    ---
+
+                    Now, please create some question **only** on the content above:
+                    
+                    """
+            }],
+
+            "temperature": 0.7
+        }
+
+        try:
+            response = requests.post(url, headers=headers, json=data)
+            response.raise_for_status()  # اگر وضعیت 4xx یا 5xx باشه خطا می‌ندازه
+            result = response.json()
+
+            if "choices" in result:
+                return result["choices"][0]["message"]["content"]
+            else:
+                return "⚠️ Unexpected response from DeepSeek."
+        except Exception as e:
+            return f"❌ Error communicating with DeepSeek: {str(e)}"

@@ -9,8 +9,13 @@
     <div class="card shadow-sm p-4">
         <h2 class="mb-4 text-primary">{{ note.title }}</h2>
         <div class="note-detail-content {% if note.content|is_farsi %}rtl-text{% else %}ltr-text{% endif %}">
-            {{ note.content|linebreaks }}
+            {{ note.content|linebreaksbr }}
         </div>
+        <form action="{% url "learning:create-question-by-gpt" note.pk %}" method="post">
+            {% csrf_token %}
+            <button class="btn btn-info">create a exam for me</button>
+        </form>
+
     </div>
 </div>
 {% endblock %}
