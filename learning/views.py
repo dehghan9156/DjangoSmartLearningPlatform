@@ -1,4 +1,4 @@
-from django.contrib.messages import success
+﻿from django.contrib.messages import success
 from django.http import JsonResponse
 from django.views.generic import ListView, DetailView, UpdateView, DeleteView, CreateView
 from django.shortcuts import render, redirect, get_object_or_404
@@ -6,7 +6,7 @@ from django.contrib import messages
 from django.views import View
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
-
+# test test
 from DjangoSmartLearningPlatform.settings import OPENAI_API_KEY
 from .forms import *
 from .models import *
