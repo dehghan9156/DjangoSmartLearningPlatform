@@ -1,12 +1,11 @@
 ﻿from django.contrib.messages import success
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.views.generic import ListView, DetailView, UpdateView, DeleteView, CreateView
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.views import View
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
-# test test
 from DjangoSmartLearningPlatform.settings import OPENAI_API_KEY
 from .forms import *
 from .models import *
@@ -14,6 +13,7 @@ import requests
 from django.http import JsonResponse
 from django.conf import settings
 import openai
+
 
 class NoteAddView(View, LoginRequiredMixin):
     def get(self, request):
@@ -96,7 +96,8 @@ class GptSummaryView(View):
         }
         data = {
             "model": "gpt-4o-mini",
-            "messages": [{"role": "user", "content": f"Please summarize this text:\n{prompt}"}],
+            "messages": [{"role": "user",
+                          "content": f"Please summarize this text in the same language as the input:\n{prompt}"}],
             "temperature": 0.7
         }
 
@@ -146,8 +147,7 @@ class GptNotQuestionView(View):
                     Now, answer this question based **only** on the content above:
                     {question}
                     """
-                }],
-
+            }],
 
             "temperature": 0.7
         }
@@ -164,21 +164,25 @@ class GptNotQuestionView(View):
         except Exception as e:
             return f"❌ Error communicating with DeepSeek: {str(e)}"
 
+
 class NoteDetailView(View):
-    def get(self,request,pk):
+    def get(self, request, pk):
         note = Note.objects.get(pk=pk)
-        return render(request,"learning/note-detail.html",{"note":note})
+        return render(request, "learning/note-detail.html", {"note": note})
+
 
 class NoteCreateQuestionbyGptView(View):
-    def post(self,request,pk):
+    def post(self, request, pk):
         note = Note.objects.get(pk=pk)
         prompt = note.content
         question_text = self.call_deepseek(prompt)
         question_list = question_text.split("\n")
         # print("question",question_list)
-        return render(request,"learning/note-question-by-gpt.html",{"question_list":question_list})
 
-    def call_deepseek(self,prompt):
+
+        return render(request, "learning/note-question-by-gpt.html", {"question_list": question_list, "note": note})
+
+    def call_deepseek(self, prompt):
         url = "https://api.openai.com/v1/chat/completions"
         api_key = OPENAI_API_KEY
         headers = {
@@ -194,7 +198,7 @@ class NoteCreateQuestionbyGptView(View):
                     {prompt}
                     ---
 
-                    Now, please create some question **only** on the content above:
+                    Now, please create four question **only** on the content above:
                     
                     """
             }],
@@ -213,3 +217,68 @@ class NoteCreateQuestionbyGptView(View):
                 return "⚠️ Unexpected response from DeepSeek."
         except Exception as e:
             return f"❌ Error communicating with DeepSeek: {str(e)}"
+
+
+class NoteCheckAnswerGptView(View):
+    def post(self, request, pk):
+        note = Note.objects.get(pk=pk)
+        answers = request.POST
+        # print(answers)
+        lst_ans = []
+        for key in answers:
+            if key.startswith("answer_"):
+                ans_user = answers[key]
+                lst_ans.append(ans_user)
+        print(lst_ans)
+
+
+        feedback = self.call_deepseek(note, lst_ans)
+        print("پرومپت نهایی:\n", note)
+        print("پاسخ کامل GPT:\n", feedback)
+        return render(request, "learning/feedback-gpt.html",
+                      {"lst_ans": lst_ans, "feedback": feedback})
+
+    def call_deepseek(self, note, lst_ans):
+        url = "https://api.openai.com/v1/chat/completions"
+        api_key = OPENAI_API_KEY
+        headers = {
+            "Authorization": f"Bearer {api_key}",
+            "Content-Type": "application/json"
+        }
+
+        # 🧠 ساخت پرامپت قابل درک برای GPT
+        prompt = f"""The following is a user note:
+        ---
+        {note.content}
+        ---
+
+        The following are multiple answers based ONLY on the note above.
+        Please evaluate EACH answer separately.
+
+        For each answer, indicate if it is correct ✅ or incorrect ❌ and explain why.
+
+        """
+
+        for i, answer in enumerate(lst_ans, 1):
+            prompt += f"\nAnswer {i}: {answer}"
+
+        data = {
+            "model": "gpt-4o-mini",
+            "messages": [{
+                "role": "user",
+                "content": prompt
+            }],
+            "temperature": 0.5
+        }
+
+        try:
+            response = requests.post(url, headers=headers, json=data)
+            response.raise_for_status()
+            result = response.json()
+
+            if "choices" in result:
+                return result["choices"][0]["message"]["content"]
+            else:
+                return "⚠️ Unexpected response from GPT."
+        except Exception as e:
+            return f"❌ Error communicating with GPT: {str(e)}"

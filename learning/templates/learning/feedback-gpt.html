@@ -1,0 +1,10 @@
+<h2>📝 پاسخ‌های شما</h2>
+<ul>
+    {% for a in lst_ans %}
+        <li>{{ a }}</li>
+    {% endfor %}
+</ul>
+<h2>🧠 بازخورد GPT برای تمام پاسخ‌ها</h2>
+<pre style="white-space: pre-wrap; background: #f4f4f4; padding: 1em;">{{ feedback }}</pre>
+
+

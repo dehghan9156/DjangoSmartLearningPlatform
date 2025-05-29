@@ -1,0 +1,11 @@
+# اجرای سرور WebSocket با Daphne
+daphne DjangoSmartLearningPlatform.asgi:application
+
+# اگر پورت 8000 اشغال بود:
+daphne -p 9000 DjangoSmartLearningPlatform.asgi:application
+
+# اجرای Redis:
+redis-server
+
+# نصب پکیج ضروری:
+pip install channels_redis
