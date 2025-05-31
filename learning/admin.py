@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Note,Message
+from .models import *
 from django.contrib.admin import ModelAdmin
 
 
@@ -13,5 +13,10 @@ class CustomMessage(ModelAdmin):
     search_fields = ("id",)
 
 
+class CustomQuestion(ModelAdmin):
+    list_display = ("note","pk","correct_answer",)
+    search_fields = ("id",)
+
 admin.site.register(Note,CustomNote)
 admin.site.register(Message,CustomMessage)
+admin.site.register(Question,CustomQuestion)

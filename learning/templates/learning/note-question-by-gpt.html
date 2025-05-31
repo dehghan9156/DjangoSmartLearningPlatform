@@ -1,23 +1,12 @@
-{% extends "base.html" %}
-{% block content %}
-{% load static %}
-<link rel="stylesheet" href="{% static 'learning/css/note-question-by-gpt.css' %}">
-<div class="question-container">
-    <h2 class="question-title">🧠Create Question By GPT</h2>
-    {% if question_list %}
-        <form method="post" action="{% url "learning:note-check-answer-gpt" note.pk %}">
-            {% csrf_token %}
-            {% for q in question_list %}
-                <div class="question-box">
-                    <div class="question-line">📌 {{ q }}</div>
-                    <textarea class="answer-box" name="answer_{{q.pk}}"></textarea>
-                </div>
-                <hr>
-            {% endfor %}
-            <button type="submit" class="btn btn-primary">Submit Answers</button>
-        </form>
-    {% else %}
-        <p class="no-question">❗Yet No Create Question</p>
-    {% endif %}
-</div>
-{% endblock %}
+<h2>ساختار دیکشنری شده‌ی سوالات:</h2>
+{% for q in structured_questions %}
+  <div style="margin-bottom: 20px; padding: 10px; border: 1px solid #ccc;">
+    <p><strong>{{ q.question }}</strong></p>
+    <ul>
+      <li>{{ q.A }}</li>
+      <li>{{ q.B }}</li>
+      <li>{{ q.C }}</li>
+      <li>{{ q.D }}</li>
+    </ul>
+  </div>
+{% endfor %}

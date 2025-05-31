@@ -1,53 +1,74 @@
-.question-item {
-    background-color: #ffffff;
-    border: 1px solid #e0e0e0;
+body {
+    font-family: 'Segoe UI', sans-serif;
+    background: #f4f4f9;
+    margin: 0;
+    padding: 0;
+}
+
+.question-container {
+    max-width: 800px;
+    margin: 40px auto;
+    background: white;
+    padding: 30px;
     border-radius: 12px;
-    padding: 20px;
+    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+}
+
+.question-title {
+    font-size: 26px;
+    color: #3c3c3c;
+    text-align: center;
     margin-bottom: 25px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-    transition: 0.3s;
 }
 
-.question-item:hover {
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+.question-box {
+    margin-bottom: 25px;
 }
 
-.question-label {
-    display: block;
-    font-weight: 600;
-    font-size: 15px;
-    color: #444;
-    margin-bottom: 10px;
-    padding-right: 20px;
-    position: relative;
-}
-
-.question-label::before {
-    content: "📝";
-    position: absolute;
-    right: 0;
-    top: 0;
+.question-line {
     font-size: 18px;
-    color: #ff5252;
-}
-
-.answer-box {
-    width: 100%;
-    padding: 14px 16px;
-    font-size: 14px;
-    font-family: 'Vazirmatn', sans-serif;
+    margin-bottom: 10px;
     color: #333;
-    background-color: #fdfdfd;
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    resize: vertical;
-    transition: 0.3s;
-    box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
 }
 
-.answer-box:focus {
-    border-color: #3f51b5;
-    outline: none;
-    background-color: #fff;
-    box-shadow: 0 0 0 3px rgba(63, 81, 181, 0.2);
+.option-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding-left: 15px;
+}
+
+.option-label {
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.option-label input[type="radio"] {
+    transform: scale(1.2);
+}
+
+.submit-button {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    font-size: 18px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.submit-button:hover {
+    background-color: #388e3c;
+}
+
+.no-question {
+    text-align: center;
+    font-size: 18px;
+    color: #888;
 }

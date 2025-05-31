@@ -173,14 +173,41 @@ class NoteDetailView(View):
 
 class NoteCreateQuestionbyGptView(View):
     def post(self, request, pk):
+        save_question = []
         note = Note.objects.get(pk=pk)
         prompt = note.content
+        # 1. دریافت خروجی خام از GPT
         question_text = self.call_deepseek(prompt)
-        question_list = question_text.split("\n")
-        # print("question",question_list)
 
+        # 2. تبدیل به لیست خطوط (خط‌به‌خط)
+        question_list = [line.strip() for line in question_text.strip().split("\n") if line.strip()]
 
-        return render(request, "learning/note-question-by-gpt.html", {"question_list": question_list, "note": note})
+        # 3. ساختاردهی هر 5 خط (سؤال و گزینه‌ها) به دیکشنری
+        structured_questions = []
+        for i in range(0, len(question_list), 6):  # چون الان 6 خط برای هر سؤال داریم
+            try:
+                answer_line = question_list[i + 5]
+                answer_letter = answer_line.replace("Answer:", "").strip()
+
+                q = {
+                    "question": question_list[i],
+                    "A": question_list[i + 1],
+                    "B": question_list[i + 2],
+                    "C": question_list[i + 3],
+                    "D": question_list[i + 4],
+                    "answer": answer_letter  # اضافه شدن گزینه صحیح
+                }
+                structured_questions.append(q)
+            except IndexError:
+                print(f"⚠️ Skipping incomplete question block at index {i}")
+
+        # 4. ارسال همه چیز به قالب
+        return render(request, "learning/note-question-by-gpt.html", {
+            "note": note,
+            "question_text": question_text,
+            "question_list": question_list,
+            "structured_questions": structured_questions
+        })
 
     def call_deepseek(self, prompt):
         url = "https://api.openai.com/v1/chat/completions"
@@ -194,13 +221,25 @@ class NoteCreateQuestionbyGptView(View):
             "messages": [{
                 "role": "user",
                 "content": f"""The following is a user note:
-                    ---
-                    {prompt}
-                    ---
-
-                    Now, please create four question **only** on the content above:
-                    
-                    """
+                        ---
+                        {prompt}
+                        ---
+    
+                  
+                        Based on the above note, generate four multiple-choice test questions. For each question:
+                        - Provide four options labeled A, B, C, and D.
+                        - Clearly indicate the correct answer at the end of each question in the format: Answer: X (e.g., Answer: B)
+                        - Do not provide any explanation or reasoning.
+                        
+                        Output format:
+                        1. [Question text]
+                        A) ...
+                        B) ...
+                        C) ...
+                        D) ...
+                        Answer: [correct option letter]
+                        ...
+                        """
             }],
 
             "temperature": 0.7
@@ -230,7 +269,6 @@ class NoteCheckAnswerGptView(View):
                 ans_user = answers[key]
                 lst_ans.append(ans_user)
         print(lst_ans)
-
 
         feedback = self.call_deepseek(note, lst_ans)
         print("پرومپت نهایی:\n", note)
