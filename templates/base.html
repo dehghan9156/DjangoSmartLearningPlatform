@@ -7,9 +7,11 @@
     <title>{% block title %}Educational Platform{% endblock %}</title>
 
     {% include 'bootstrapt.html' %}
-{#    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">#}
+    {#    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">#}
     <link rel="stylesheet" href="{% static 'css/base.css' %}">
     <link href="https://fonts.googleapis.com/css2?family=Vazirmatn&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+
     <style>
         body {
             font-family: 'Vazirmatn', sans-serif;
@@ -25,14 +27,32 @@
         <div class="logo">
             <h1 class="text-purple">Educational Platform</h1>
         </div>
+        {% if request.user.is_authenticated %}
+            <div class="d-flex align-items-center gap-2 bg-light border rounded px-3 py-1 shadow-sm">
+                <i class="bi bi-person-circle text-secondary" style="font-size: 1.4rem;"></i>
+                <div class="d-flex flex-column">
+                    <span class="fw-semibold small text-dark">{{ request.user.email }}</span>
+                    <span class="text-muted small">
+                {% if request.user.role == "admin" %}Admin
+                {% elif request.user.role == "teacher" %}Teacher
+                {% elif request.user.role == "student" %}Srudent
+                {% endif %}
+            </span>
+                </div>
+            </div>
+        {% endif %}
         <nav>
             <ul class="nav">
                 <li class="nav-item"><a class="nav-link" href="#">Home</a></li>
                 <li class="nav-item"><a class="nav-link" href="{% url "learning:note-list" %}">Note</a></li>
                 {% if user.is_authenticated %}
+                    {% if request.user.role == "student" or request.user.role=="admin" %}
+                        <li class="nav-item"><a class="nav-link" href="#">Exam</a></li>
+                    {% endif %}
                     <li class="nav-item"><a class="nav-link" href="{% url "learning:test" %}">ChatBot</a></li>
                     <li class="nav-item"><a class="nav-link" href="#">Profile</a></li>
                     <li class="nav-item"><a class="nav-link" href="{% url 'account_logout' %}">Logout</a></li>
+
                 {% else %}
                     <li class="nav-item">
                         <a href="{% url 'account_login' %}" class="nav-link">Login</a>

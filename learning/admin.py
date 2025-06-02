@@ -14,7 +14,7 @@ class CustomMessage(ModelAdmin):
 
 
 class CustomQuestion(ModelAdmin):
-    list_display = ("note","pk","correct_answer",)
+    # list_display = ("pk","correct_answer",)
     search_fields = ("id",)
 
 admin.site.register(Note,CustomNote)

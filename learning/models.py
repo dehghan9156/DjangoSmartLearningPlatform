@@ -1,6 +1,6 @@
 from django.db import models
-from accounts.models import CustomUser
-from accounts.models import CustomUser
+from coreusers.models import CustomUser
+from coreusers.models import CustomUser
 
 class Note(models.Model):
     title = models.CharField(max_length=250)
@@ -22,3 +22,6 @@ class Question(models.Model):
     option_b = models.CharField(max_length=250)
     option_c = models.CharField(max_length=250)
     option_d = models.CharField(max_length=250)
+
+    def __str__(self):
+        return f"{self.note.title}--{self.pk}"

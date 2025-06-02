@@ -1,12 +1,17 @@
-<h2>ساختار دیکشنری شده‌ی سوالات:</h2>
+{% extends 'base.html' %}
+{% block content %}
+<h2>Question Generate by GPT:</h2>
+
 {% for q in structured_questions %}
   <div style="margin-bottom: 20px; padding: 10px; border: 1px solid #ccc;">
     <p><strong>{{ q.question }}</strong></p>
     <ul>
-      <li>{{ q.A }}</li>
-      <li>{{ q.B }}</li>
-      <li>{{ q.C }}</li>
-      <li>{{ q.D }}</li>
+        <li>{{ q.A }}</li>
+        <li>{{ q.B }}</li>
+        <li>{{ q.C }}</li>
+        <li>{{ q.D }}</li>
+        ☑️Correc Answer:{{ q.answer }}
     </ul>
   </div>
 {% endfor %}
+{% endblock %}

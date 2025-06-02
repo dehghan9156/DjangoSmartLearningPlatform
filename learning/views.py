@@ -36,7 +36,7 @@ class NoteListView(View, LoginRequiredMixin):
         notes = Note.objects.filter(created_by=self.request.user)
         if notes.exists():
             return render(request, "learning/note-list.html", {"notes": notes})
-        return render(request, "learning/note-list.html", {"messages": "There are no notes for you."})
+        return render(request, "learning/note-list.html")
 
 
 class NoteDeleteView(View, LoginRequiredMixin):
@@ -198,6 +198,16 @@ class NoteCreateQuestionbyGptView(View):
                     "answer": answer_letter  # اضافه شدن گزینه صحیح
                 }
                 structured_questions.append(q)
+                Question.objects.create(
+                    note=note,
+                    soal=q["question"],
+                    correct_answer = q["answer"],
+                    option_a =q["A"],
+                    option_b =q["B"],
+                    option_c =q["C"],
+                    option_d =q["D"],
+                )
+
             except IndexError:
                 print(f"⚠️ Skipping incomplete question block at index {i}")
 

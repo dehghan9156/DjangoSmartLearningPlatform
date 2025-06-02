@@ -43,7 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'accounts',
+    'coreusers',
     'django.contrib.sites',
     'allauth',
     'allauth.account',
@@ -163,7 +163,7 @@ SOCIALACCOUNT_PROVIDERS = {
     }
 }
 
-AUTH_USER_MODEL = 'accounts.CustomUser'
+AUTH_USER_MODEL = 'coreusers.CustomUser'
 
 
 
@@ -176,4 +176,8 @@ CHANNEL_LAYERS = {
             "hosts": [("127.0.0.1", 6379)],
         },
     },
+}
+
+ACCOUNT_FORMS = {
+    'signup': 'coreusers.forms.CustomSignupForm',
 }
