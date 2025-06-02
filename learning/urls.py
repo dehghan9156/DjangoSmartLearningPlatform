@@ -14,6 +14,6 @@ urlpatterns = [
     path("note/detail/<int:pk>/",views.NoteDetailView.as_view(),name="note-detail"),
     path("note/create/question/<int:pk>/",views.NoteCreateQuestionbyGptView.as_view(),name="create-question-by-gpt"),
     path("note/check/answer/<int:pk>/",views.NoteCheckAnswerGptView.as_view(),name="note-check-answer-gpt"),
-
+    path("exam/read/",views.ExamReadyView.as_view(),name="exam-ready"),
 ]
 

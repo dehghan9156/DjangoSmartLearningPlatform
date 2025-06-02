@@ -11,11 +11,12 @@
         <div class="note-detail-content {% if note.content|is_farsi %}rtl-text{% else %}ltr-text{% endif %}">
             {{ note.content|linebreaksbr }}
         </div>
+        {% if request.user.role == "teacher" %}
         <form action="{% url "learning:create-question-by-gpt" note.pk %}" method="post">
             {% csrf_token %}
             <button class="btn btn-info">create a exam for me</button>
         </form>
-
+        {% endif %}
     </div>
 </div>
 {% endblock %}

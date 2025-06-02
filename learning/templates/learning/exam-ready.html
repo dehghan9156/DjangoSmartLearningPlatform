@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="container my-5 d-flex justify-content-center">
+        <div class="card shadow-lg p-4" style="max-width: 500px; width: 100%; border-radius: 20px;">
+            <div class="card-body text-center">
+                <h3 class="card-title mb-4 text-primary">📝 Final Exam Time</h3>
+                <p class="mb-4">Are you ready to begin your exam? Once started, you can’t go back!</p>
+
+                <form method="post">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-success btn-lg px-5 py-2 rounded-pill shadow-sm">
+                        ✅ Yes, I’m Ready!
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

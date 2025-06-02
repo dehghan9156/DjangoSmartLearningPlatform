@@ -4,50 +4,53 @@
 {% block content %}
     <link rel="stylesheet" href="{% static 'learning/css/note-list.css' %}">
     <div class="container mt-5">
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <h2 class="mb-0">📚 My Notes</h2>
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="mb-0">📚 My Notes</h2>
+        {% if request.user.role == "teacher" %}
             <a href="{% url "learning:note-add" %}" class="btn btn-success">
                 ➕ Add Note
             </a>
-        </div>
-
-        <div class="row">
-            {% for note in notes %}
-                <div class="col-md-6 mb-4">
-                    <div class="card shadow-sm note-card">
-                        <div class="card-body">
-                            <h5 class="card-title text-primary">{{ note.title }}</h5>
-                            <a href="{% url "learning:note-detail" note.pk %}" style="text-decoration: none; color: black;">
-
-                                <p class="note-content {% if note.content|is_farsi %}rtl-text{% endif %}">
-                                    {{ note.content|truncatewords:50 }}</p>
-                            </a>
-
-                            <div class="note-date-box">
-                                🕒 {{ note.created_date|date:"Y-m-d H:i" }}
-                            </div>
-                        </div>
-                        <div class="d-flex" style="gap: 4px;">
-                            <a href="{% url 'learning:note-update' note.pk %}"
-                               class="btn btn-primary flex-fill">Edit</a>
-                            <a href="{% url 'learning:note-delete' note.pk %}"
-                               class="btn btn-danger flex-fill">Delete</a>
-                            <a href="{% url 'learning:summary-gpt' note.pk %}"
-                               class="btn btn-warning flex-fill">Summary</a>
-                            <a href="{% url "learning:note-question-gpt" note.pk %}" class="btn btn-info flex-fill">
-                                Ask For AI🧠</a>
-                        </div>
-
-                    </div>
-                </div>
-            {% empty %}
-                <div class="col-12">
-                    <div class="alert alert-info text-center">
-                        No notes have been added yet 😊
-                    </div>
-                </div>
-            {% endfor %}
-        </div>
+        {% endif %}
     </div>
+
+    <div class="row">
+    {% for note in notes %}
+        <div class="col-md-6 mb-4">
+        <div class="card shadow-sm note-card">
+        <div class="card-body">
+            <h5 class="card-title text-primary">{{ note.title }}</h5>
+            <a href="{% url "learning:note-detail" note.pk %}"
+               style="text-decoration: none; color: black;">
+
+                <p class="note-content {% if note.content|is_farsi %}rtl-text{% endif %}">
+                    {{ note.content|truncatewords:50 }}</p>
+            </a>
+
+            <div class="note-date-box">
+                🕒 {{ note.created_date|date:"Y-m-d H:i" }}
+            </div>
+        </div>
+        <div class="note-actions mt-3 px-3 pb-3">
+            <div class="d-grid gap-2 d-md-flex justify-content-md-start flex-wrap">
+                {% if request.user.role == "teacher" %}
+                    <a href="{% url 'learning:note-update' note.pk %}" class="btn btn-sm btn-outline-primary">Edit</a>
+                    <a href="{% url 'learning:note-delete' note.pk %}" class="btn btn-sm btn-outline-danger">Delete</a>
+                {% endif %}
+                <a href="{% url 'learning:summary-gpt' note.pk %}" class="btn btn-sm btn-outline-warning">Summary</a>
+                <a href="{% url 'learning:note-question-gpt' note.pk %}" class="btn btn-sm btn-outline-info">Ask For AI🧠</a>
+            </div>
+        </div>
+        </div>
+        </div>
+
+    {% empty %}
+        <div class="col-12">
+            <div class="alert alert-info text-center">
+                No notes have been added yet 😊
+            </div>
+        </div>
+    {% endfor %}
+</div>
+</div>
 
 {% endblock %}

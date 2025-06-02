@@ -14,8 +14,21 @@ from django.http import JsonResponse
 from django.conf import settings
 import openai
 
+import logging
+from django.views import View
+from django.contrib.auth.mixins import UserPassesTestMixin
 
-class NoteAddView(View, LoginRequiredMixin):
+
+
+class TeacherRequiredMixin(UserPassesTestMixin):
+    def test_func(self):
+        return self.request.user.is_authenticated and self.request.user.role == 'teacher'
+
+    def handle_no_permission(self):
+        messages.error(self.request,"This section is not accessible to you.",'error')
+        return super().handle_no_permission()
+
+class NoteAddView(TeacherRequiredMixin,View, LoginRequiredMixin):
     def get(self, request):
         form = NoteForm()
         return render(request, "learning/note-add.html", {"form": form})
@@ -33,13 +46,13 @@ class NoteAddView(View, LoginRequiredMixin):
 
 class NoteListView(View, LoginRequiredMixin):
     def get(self, request):
-        notes = Note.objects.filter(created_by=self.request.user)
+        notes = Note.objects.all()
         if notes.exists():
             return render(request, "learning/note-list.html", {"notes": notes})
         return render(request, "learning/note-list.html")
 
 
-class NoteDeleteView(View, LoginRequiredMixin):
+class NoteDeleteView(TeacherRequiredMixin,View, LoginRequiredMixin):
     def get(self, request, pk):
         note = Note.objects.get(pk=pk)
         note.delete()
@@ -47,7 +60,7 @@ class NoteDeleteView(View, LoginRequiredMixin):
         return redirect("learning:note-list")
 
 
-class NoteUpdateView(View, LoginRequiredMixin):
+class NoteUpdateView(TeacherRequiredMixin,View, LoginRequiredMixin):
     def get(self, request, pk):
         note = Note.objects.get(pk=pk)
         form = NoteForm(instance=note)
@@ -330,3 +343,8 @@ class NoteCheckAnswerGptView(View):
                 return "⚠️ Unexpected response from GPT."
         except Exception as e:
             return f"❌ Error communicating with GPT: {str(e)}"
+
+
+class ExamReadyView(View,LoginRequiredMixin):
+    def get(self,request):
+        return render(request,"learning/exam-ready.html")

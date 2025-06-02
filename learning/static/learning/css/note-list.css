@@ -1,10 +1,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Vazirmatn&display=swap');
 .note-card {
+    height: 100%;
     display: flex;
     flex-direction: column;
-    height: 100%;
-    position: relative;
+    justify-content: space-between;
 }
+
 
 .note-content {
     direction: ltr;
