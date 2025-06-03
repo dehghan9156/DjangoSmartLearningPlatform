@@ -25,3 +25,9 @@ class Question(models.Model):
 
     def __str__(self):
         return f"{self.note.title}--{self.pk}"
+
+class ExamAnswer(models.Model):
+    student = models.ForeignKey(CustomUser,on_delete=models.CASCADE)
+    exam = models.ForeignKey(Note,on_delete=models.CASCADE)
+    score = models.IntegerField()
+    created_data = models.DateTimeField(auto_now_add=True)
