@@ -345,6 +345,13 @@ class NoteCheckAnswerGptView(View):
             return f"❌ Error communicating with GPT: {str(e)}"
 
 
-class ExamReadyView(View,LoginRequiredMixin):
+class SelectExamView(View,LoginRequiredMixin):
     def get(self,request):
-        return render(request,"learning/exam-ready.html")
+        notes = Note.objects.all()
+        return render(request,"learning/select-exam.html",{"notes":notes})
+
+class ExamView(View,LoginRequiredMixin):
+    def post(self,request,pk):
+        note = Note.objects.get(pk=pk)
+        questions = Question.objects.filter(note=note)
+        return render(request,"learning/exam.html",{"questions":questions})

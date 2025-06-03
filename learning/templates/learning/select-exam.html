@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-center text-primary mb-4">📚 Choose Your Quiz</h2>
+    <div class="row justify-content-center">
+        {% for note in notes %}
+            <div class="col-md-6 col-lg-4 d-flex justify-content-center mb-4">
+                <form method="post" action="{% url 'learning:exam' note.pk %}" class="w-100" style="max-width: 20rem;">
+                    {% csrf_token %}
+                    <button type="submit" class="card shadow-lg border-0 rounded-4 h-100 w-100 bg-light text-dark text-decoration-none hover-shadow" style="transition: all 0.3s;">
+                        <div class="card-body text-center py-4">
+                            <h5 class="card-title mb-3">📝 {{ note.title }}</h5>
+                            <p class="card-text">Click to start this quiz</p>
+                        </div>
+                    </button>
+                </form>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

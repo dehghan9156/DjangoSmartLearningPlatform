@@ -47,7 +47,7 @@
                 <li class="nav-item"><a class="nav-link" href="{% url "learning:note-list" %}">Note</a></li>
                 {% if user.is_authenticated %}
                     {% if request.user.role == "student" or request.user.role == "admin" %}
-                        <li class="nav-item"><a class="nav-link" href="{% url "learning:exam-ready" %}">Exam</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url "learning:select-exam" %}">Exam</a></li>
                     {% endif %}
                     <li class="nav-item"><a class="nav-link" href="{% url "learning:test" %}">ChatBot</a></li>
                     <li class="nav-item"><a class="nav-link" href="#">Profile</a></li>
