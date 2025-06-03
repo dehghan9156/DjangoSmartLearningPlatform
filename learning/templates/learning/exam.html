@@ -1,45 +1,49 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="container mt-5">
-    <h2 class="text-center text-primary mb-4">📝 Quiz Time</h2>
-    <form action="" method="post">
-        {% csrf_token %}
+    <div class="container mt-5">
+        <h2 class="text-center text-primary mb-4">📝 Quiz Time</h2>
+        <form action="{% url "learning:exam-check-answer" %}" method="post">
+            {% csrf_token %}
+            {% for question in questions %}
+                <div class="card shadow-sm mb-4 p-3 border-0 rounded-4">
+                    <div class="card-body">
+                        <h5 class="card-title mb-3">{{ forloop.counter }}.{{ question.soal }}</h5>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="q-{{ question.id }}" value="A"
+                                   id="q{{ question.id }}a" required>
+                            <label class="form-check-label" for="q{{ question.id }}a">
+                                {{ question.option_a }}
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="q-{{ question.id }}" value="B"
+                                   id="q{{ question.id }}b">
+                            <label class="form-check-label" for="q{{ question.id }}b">
+                                {{ question.option_b }}
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="q-{{ question.id }}" value="C"
+                                   id="q{{ question.id }}c">
+                            <label class="form-check-label" for="q{{ question.id }}c">
+                                {{ question.option_c }}
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="q-{{ question.id }}" value="D"
+                                   id="q{{ question.id }}d">
+                            <label class="form-check-label" for="q{{ question.id }}d">
+                                {{ question.option_d }}
+                            </label>
+                        </div>
 
-        {% for question in questions %}
-            <div class="card shadow-sm mb-4 p-3 border-0 rounded-4">
-                <div class="card-body">
-                    <h5 class="card-title mb-3">{{ forloop.counter }}. {{ question.soal }}</h5>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="q{{ question.id }}" value="A" id="q{{ question.id }}a" required>
-                        <label class="form-check-label" for="q{{ question.id }}a">
-                            {{ question.option_a }}
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="q{{ question.id }}" value="B" id="q{{ question.id }}b">
-                        <label class="form-check-label" for="q{{ question.id }}b">
-                            {{ question.option_b }}
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="q{{ question.id }}" value="C" id="q{{ question.id }}c">
-                        <label class="form-check-label" for="q{{ question.id }}c">
-                            {{ question.option_c }}
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="q{{ question.id }}" value="D" id="q{{ question.id }}d">
-                        <label class="form-check-label" for="q{{ question.id }}d">
-                            {{ question.option_d }}
-                        </label>
                     </div>
                 </div>
-            </div>
-        {% endfor %}
+            {% endfor %}
 
-        <div class="text-center mt-4">
-            <button type="submit" class="btn btn-success btn-lg px-5 rounded-pill shadow">✅ Submit Answers</button>
-        </div>
-    </form>
-</div>
+            <div class="text-center mt-4">
+                <button type="submit" class="btn btn-success btn-lg px-5 rounded-pill shadow">✅ Submit Answers</button>
+            </div>
+        </form>
+    </div>
 {% endblock %}

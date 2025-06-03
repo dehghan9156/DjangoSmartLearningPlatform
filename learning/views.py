@@ -355,3 +355,30 @@ class ExamView(View,LoginRequiredMixin):
         note = Note.objects.get(pk=pk)
         questions = Question.objects.filter(note=note)
         return render(request,"learning/exam.html",{"questions":questions})
+
+class ExamCheckAnswer(LoginRequiredMixin,View):
+    def post(self,request):
+        question = Question.objects.all()
+        result = []
+        for ques in question:
+            answers = request.POST.get(f"q-{ques.pk}")
+            result.append({
+                "answer_user":answers,
+                "correct_ans":ques.correct_answer,
+                "is_check" : answers==ques.correct_answer,
+            })
+        correct = 0
+        total = len(result)
+        for i in result:
+            if i["is_check"]==True:
+                correct+=1
+        if total>0:
+            score = int((correct / total)*100)
+        else:
+            score = 0
+        return render(request,"learning/result.html",{
+            'result': result,
+            'score': score,
+            'correct': correct,
+            'total': total
+        })

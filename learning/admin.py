@@ -14,7 +14,7 @@ class CustomMessage(ModelAdmin):
 
 
 class CustomQuestion(ModelAdmin):
-    # list_display = ("pk","correct_answer",)
+    list_display = ("pk","note","correct_answer",)
     search_fields = ("id",)
 
 class CustomExamAnswer(ModelAdmin):

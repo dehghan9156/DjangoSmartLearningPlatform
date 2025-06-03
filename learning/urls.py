@@ -16,5 +16,6 @@ urlpatterns = [
     path("note/check/answer/<int:pk>/",views.NoteCheckAnswerGptView.as_view(),name="note-check-answer-gpt"),
     path("select/exam/",views.SelectExamView.as_view(),name="select-exam"),
     path("exam/<int:pk>/",views.ExamView.as_view(),name="exam"),
+    path("exam/check/answer/",views.ExamCheckAnswer.as_view(),name="exam-check-answer"),
 ]
 

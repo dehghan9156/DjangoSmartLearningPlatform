@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container my-5">
+
+    <div class="text-center mb-4">
+        <h2 class="text-primary">📊 Exam Result</h2>
+        <div class="card shadow-lg p-4 mx-auto" style="max-width: 400px; border-radius: 15px;">
+            <h4 class="mb-3">Your Score: <span class="text-success">{{ score }}/100</span></h4>
+            <p>Correct Answers: <strong>{{ correct }}</strong> / {{ total }}</p>
+        </div>
+    </div>
+
+    <hr class="my-5">
+
+    <div class="row">
+        {% for item in result %}
+            <div class="col-md-6">
+                <div class="card mb-4 shadow-sm border-0 rounded-4">
+                    <div class="card-body">
+                        <h5 class="card-title mb-3">Question {{ forloop.counter }}</h5>
+                        <p>📝 <strong>Your Answer:</strong> {{ item.answer_user|default:"❌ بدون پاسخ" }}</p>
+                        <p>✅ <strong>Correct Answer:</strong> {{ item.correct_ans }}</p>
+                        {% if item.is_check %}
+                            <span class="badge bg-success p-2">Correct</span>
+                        {% else %}
+                            <span class="badge bg-danger p-2">Wrong</span>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+</div>
+{% endblock %}
