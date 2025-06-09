@@ -31,3 +31,9 @@ class ExamAnswer(models.Model):
     exam = models.ForeignKey(Note,on_delete=models.CASCADE)
     score = models.IntegerField()
     created_data = models.DateTimeField(auto_now_add=True)
+
+class ExamSession(models.Model):
+    student = models.ForeignKey(CustomUser,on_delete=models.CASCADE)
+    note = models.ForeignKey(Note,on_delete=models.CASCADE)
+    start_time = models.DateTimeField(auto_now_add=True)
+    complete = models.BooleanField(default=False)

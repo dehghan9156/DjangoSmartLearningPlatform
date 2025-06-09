@@ -13,11 +13,11 @@ import requests
 from django.http import JsonResponse
 from django.conf import settings
 import openai
-
+from datetime import timedelta
 import logging
 from django.views import View
 from django.contrib.auth.mixins import UserPassesTestMixin
-
+from django.utils import timezone
 
 
 class TeacherRequiredMixin(UserPassesTestMixin):
@@ -352,9 +352,35 @@ class SelectExamView(View,LoginRequiredMixin):
 
 class ExamView(View,LoginRequiredMixin):
     def post(self,request,pk):
+        exam_during = timedelta(minutes=20)
+        exam_repeat = timedelta(minutes=1)
+        now = timezone.now()
         note = Note.objects.get(pk=pk)
         questions = Question.objects.filter(note=note)
-        return render(request,"learning/exam.html",{"questions":questions,"note":note})
+        exam_session = ExamSession.objects.filter(student=request.user,note=note,complete=False).first()
+        if exam_session:
+            end_time = exam_session.start_time + exam_during
+
+            if now < exam_session.start_time + exam_repeat:
+                messages.error(request,"you have most 24 hours the exam",'error')
+                return redirect("learning:note-list")
+
+            if now > exam_session.start_time + exam_during:
+                exam_session.complete = True
+                exam_session.save()
+                messages.error(request,"The exam time is over.",'error')
+                return redirect("learning:note-list")
+            else:
+                return render(request,"learning/exam.html",{"questions":questions,"note":note,"end_time":end_time})
+        else:
+            exam_session = ExamSession.objects.create(student=request.user,note=note ,start_time=now)
+            end_time = exam_session.start_time + exam_during
+            return render(request, "learning/exam.html", {
+                "questions": questions,
+                "note": note,
+                "exam_session": exam_session,
+                "end_time":end_time,
+            })
 
 class ExamCheckAnswer(LoginRequiredMixin,View):
     def post(self,request):

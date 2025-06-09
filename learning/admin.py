@@ -21,7 +21,12 @@ class CustomExamAnswer(ModelAdmin):
     list_display = ("pk","student","exam","score")
     search_fields = ("id","student")
 
+class CustomExamSession(ModelAdmin):
+    list_display = ("pk","student","start_time","complete")
+    search_fields = ("pk","student")
+
 admin.site.register(Note,CustomNote)
 admin.site.register(Message,CustomMessage)
 admin.site.register(Question,CustomQuestion)
 admin.site.register(ExamAnswer,CustomExamAnswer)
+admin.site.register(ExamSession,CustomExamSession)
