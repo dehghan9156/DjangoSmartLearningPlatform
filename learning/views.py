@@ -406,7 +406,7 @@ class ExamCheckAnswer(LoginRequiredMixin,View):
             score = 0
         ExamAnswer.objects.create(
             student= request.user,
-            exam = note,
+            note = note,
             score = score
         )
         return render(request,"learning/result.html",{

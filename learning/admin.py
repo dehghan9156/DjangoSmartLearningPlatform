@@ -18,7 +18,7 @@ class CustomQuestion(ModelAdmin):
     search_fields = ("id",)
 
 class CustomExamAnswer(ModelAdmin):
-    list_display = ("pk","student","exam","score")
+    list_display = ("pk","student","note","score")
     search_fields = ("id","student")
 
 class CustomExamSession(ModelAdmin):

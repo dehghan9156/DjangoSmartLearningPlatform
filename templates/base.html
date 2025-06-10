@@ -28,6 +28,7 @@
             <h1 class="text-purple">Educational Platform</h1>
         </div>
         {% if request.user.is_authenticated %}
+            <a href="{% url "coreusers:user-panel" %}" style="text-decoration:none;">
             <div class="d-flex align-items-center gap-2 bg-light border rounded px-3 py-1 shadow-sm">
                 <i class="bi bi-person-circle text-secondary" style="font-size: 1.4rem;"></i>
                 <div class="d-flex flex-column">
@@ -40,6 +41,7 @@
             </span>
                 </div>
             </div>
+            </a>
         {% endif %}
         <nav>
             <ul class="nav">

@@ -28,7 +28,7 @@ class Question(models.Model):
 
 class ExamAnswer(models.Model):
     student = models.ForeignKey(CustomUser,on_delete=models.CASCADE)
-    exam = models.ForeignKey(Note,on_delete=models.CASCADE)
+    note = models.ForeignKey(Note,on_delete=models.CASCADE)
     score = models.IntegerField()
     created_data = models.DateTimeField(auto_now_add=True)
 
