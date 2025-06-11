@@ -1,18 +1,21 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block content %}
+    <link rel="stylesheet" href="{% static 'coreusers/css/user_panel.css' %}">
     <div class="grades-container">
         <h2 class="grades-title">Your educational record</h2>
 
-        <div class="grades-table-container">
-            <table class="grades-table">
-                <thead>
+        <div class="grades-chart-wrapper" style="display: flex; gap: 20px; align-items: flex-start;">
+            <div class="grades-table-container" style="flex: 1;">
+                <table class="grades-table">
+                    <thead>
                     <tr>
                         <th class="header-cell">Exam</th>
                         <th class="header-cell">Score</th>
                         <th class="header-cell">Status</th>
                     </tr>
-                </thead>
-                <tbody>
+                    </thead>
+                    <tbody>
                     {% for feed in exam_feedback %}
                         <tr class="grade-row">
                             <td class="exam-title">{{ feed.note.title }}</td>
@@ -30,119 +33,42 @@
                             </td>
                         </tr>
                     {% endfor %}
-                </tbody>
-            </table>
+                    </tbody>
+                </table>
+{#                <h5>Your highest score :{{ max_score }}</h5>#}
+{#                <h5>Your lowest score :{{ min_score }}</h5>#}
+            </div>
+
+            <div class="chart-container" style="flex: 1;">
+                <canvas id="myChart" width="250" height="150"></canvas>
+            </div>
         </div>
     </div>
 
-    <style>
-        .grades-container {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            max-width: 800px;
-            margin: 30px auto;
-            padding: 20px;
-            background-color: #f9f9f9;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        }
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 
-        .grades-title {
-            color: #2c3e50;
-            text-align: center;
-            margin-bottom: 25px;
-            font-size: 24px;
-            font-weight: 600;
-        }
+    <script>
+        const labels = {{ labels|safe }};
+        const scores = {{ scores|safe }};
 
-        .grades-table-container {
-            overflow-x: auto;
-        }
+        const ctx = document.getElementById('myChart');
 
-        .grades-table {
-            width: 100%;
-            border-collapse: collapse;
-            background-color: white;
-            border-radius: 8px;
-            overflow: hidden;
-        }
-
-        .header-cell {
-            background-color: #3498db;
-            color: white;
-            padding: 15px;
-            text-align: center;
-            font-weight: 500;
-        }
-
-        .grade-row {
-            border-bottom: 1px solid #e0e0e0;
-            transition: background-color 0.2s;
-        }
-
-        .grade-row:hover {
-            background-color: #f5f5f5;
-        }
-
-        .grade-row td {
-            padding: 12px 15px;
-            text-align: center;
-        }
-
-        .exam-title {
-            text-align: right;
-            color: #333;
-            font-weight: 500;
-        }
-
-        .score-value {
-            font-weight: bold;
-            font-size: 16px;
-        }
-
-        .high-score {
-            color: #27ae60;
-        }
-
-        .medium-score {
-            color: #f39c12;
-        }
-
-        .low-score {
-            color: #e74c3c;
-        }
-
-        .status-badge {
-            display: inline-block;
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 13px;
-            font-weight: 500;
-        }
-
-        .success {
-            background-color: #d5f5e3;
-            color: #27ae60;
-        }
-
-        .warning {
-            background-color: #fdebd0;
-            color: #f39c12;
-        }
-
-        .danger {
-            background-color: #fadbd8;
-            color: #e74c3c;
-        }
-
-        @media (max-width: 600px) {
-            .grades-container {
-                padding: 15px;
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Exam Score',
+                    data: scores,
+                    backgroundColor: 'rgba(75, 192, 192, 0.5)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true
             }
+        });
+    </script>
 
-            .header-cell, .grade-row td {
-                padding: 10px 8px;
-                font-size: 14px;
-            }
-        }
-    </style>
 {% endblock %}

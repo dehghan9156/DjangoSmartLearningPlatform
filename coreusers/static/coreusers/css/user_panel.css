@@ -7,6 +7,8 @@
     background-color: #f9f9f9;
     border-radius: 12px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    max-width: 100%;  /* یا مقدار دلخواه مثل 1200px */
+    overflow-x: auto; /* اگر خیلی بزرگ شد، اسکرول افقی بیاره */
 }
 
 .grades-title {
@@ -106,4 +108,16 @@
         padding: 10px 8px;
         font-size: 14px;
     }
+}
+.grades-chart-wrapper {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+}
+
+.grades-table-container, .chart-container {
+  flex: 1;
+}
+* {
+  box-sizing: border-box;
 }
