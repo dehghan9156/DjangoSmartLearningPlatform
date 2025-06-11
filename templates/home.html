@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% block content %}
+  <script src="https://cdn.tailwindcss.com"></script>
+<section class="hero bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 text-white py-28 text-center px-6 font-sans">
+  <div class="max-w-4xl mx-auto">
+    <h1 class="text-5xl font-extrabold mb-6 leading-tight drop-shadow-md">
+      Smart Collaborative Learning Platform
+    </h1>
+    <p class="text-xl mb-12 max-w-3xl mx-auto drop-shadow-sm">
+      Learn smarter with real-time collaboration, AI tutor assistance, and interactive quizzes tailored for your success.
+    </p>
+    {% if not request.user.is_authenticated %}
+    <a href="#" class="inline-block bg-white text-indigo-600 font-semibold px-10 py-4 rounded-lg shadow-lg hover:bg-gray-100 transition">
+      Join for Free
+    </a>
+    {% endif %}
+  </div>
+</section>
+
+<section class="features py-20 bg-gray-50 font-sans">
+  <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
+
+    <div class="bg-white p-8 rounded-xl shadow-md hover:shadow-xl transition duration-300 flex flex-col items-start">
+      <div class="flex items-center mb-4 text-indigo-600">
+        <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" >
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 20h9"></path>
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16"></path>
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4 12h8"></path>
+        </svg>
+        <h3 class="text-xl font-semibold text-indigo-700">AI Tutor Assistant</h3>
+      </div>
+      <p class="text-gray-700 leading-relaxed">
+        Ask questions and get instant, intelligent answers powered by AI to help you learn faster.
+      </p>
+    </div>
+
+    <div class="bg-white p-8 rounded-xl shadow-md hover:shadow-xl transition duration-300 flex flex-col items-start">
+      <div class="flex items-center mb-4 text-indigo-600">
+        <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" >
+          <path stroke-linecap="round" stroke-linejoin="round" d="M16 12H8"></path>
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 16V8"></path>
+          <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+        </svg>
+        <h3 class="text-xl font-semibold text-indigo-700">Collaborative Notes</h3>
+      </div>
+      <p class="text-gray-700 leading-relaxed">
+        Create and edit notes simultaneously with your peers in real-time, just like Google Docs.
+      </p>
+    </div>
+
+    <div class="bg-white p-8 rounded-xl shadow-md hover:shadow-xl transition duration-300 flex flex-col items-start">
+      <div class="flex items-center mb-4 text-indigo-600">
+        <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" >
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9 17v-6h6v6"></path>
+          <rect x="4" y="4" width="16" height="16" rx="2" ry="2" />
+        </svg>
+        <h3 class="text-xl font-semibold text-indigo-700">Auto-generated Quizzes</h3>
+      </div>
+      <p class="text-gray-700 leading-relaxed">
+        Automatically convert your notes into practice quizzes to test your knowledge efficiently.
+      </p>
+    </div>
+
+    <div class="bg-white p-8 rounded-xl shadow-md hover:shadow-xl transition duration-300 flex flex-col items-start">
+      <div class="flex items-center mb-4 text-indigo-600">
+        <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" >
+          <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"></path>
+        </svg>
+        <h3 class="text-xl font-semibold text-indigo-700">Gamification</h3>
+      </div>
+      <p class="text-gray-700 leading-relaxed">
+        Earn points, badges, and climb leaderboards to stay motivated and engaged in your learning journey.
+      </p>
+    </div>
+
+  </div>
+</section>
+
+{% endblock %}

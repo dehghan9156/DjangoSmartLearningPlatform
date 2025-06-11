@@ -44,7 +44,7 @@
         {% endif %}
         <nav>
             <ul class="nav">
-                <li class="nav-item"><a class="nav-link" href="#">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url "home" %}">Home</a></li>
                 <li class="nav-item"><a class="nav-link" href="{% url "learning:note-list" %}">Note</a></li>
                 {% if user.is_authenticated %}
                     {% if request.user.role == "student" or request.user.role == "admin" %}
