@@ -52,6 +52,8 @@ INSTALLED_APPS = [
     'social_django',  # اضافه کردن این خط برای پشتیبانی از Google OAuth
     'learning',
     'channels',
+    'rest_framework',
+    'drf_yasg',
 ]
 
 MIDDLEWARE = [
