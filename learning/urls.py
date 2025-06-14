@@ -17,5 +17,6 @@ urlpatterns = [
     path("select/exam/",views.SelectExamView.as_view(),name="select-exam"),
     path("exam/<int:pk>/",views.ExamView.as_view(),name="exam"),
     path("exam/check/answer/",views.ExamCheckAnswer.as_view(),name="exam-check-answer"),
+    path("api/v1/",include("learning.api.v1.urls",namespace="api-v1")),
 ]
 
