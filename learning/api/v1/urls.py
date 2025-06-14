@@ -6,4 +6,5 @@ app_name = "api-v1"
 
 urlpatterns = [
     path("note/read/", views.NoteReadApiView.as_view(), name="note-read"),
+    path("note/detail/<int:pk>/",views.NoteDetailApiView.as_view(),name="note-detail"),
 ]

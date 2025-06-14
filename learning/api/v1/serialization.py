@@ -6,7 +6,7 @@ from coreusers.models import CustomUser
 
 
 class NoteSerializer(serializers.ModelSerializer):
-    created_By = serializers.SlugRelatedField(queryset=CustomUser.objects.all(),slug_field="email")
+    created_by = serializers.SlugRelatedField(queryset=CustomUser.objects.all(),slug_field="email")
     class Meta:
         model = Note
-        field = ["id","title","content","created_by","created_date"]
+        fields = ["id","title","content","created_by","created_date"]

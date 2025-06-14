@@ -12,5 +12,15 @@ from rest_framework import permissions
 from rest_framework.permissions import IsAuthenticated
 from django.core.mail import send_mail
 from rest_framework.generics import CreateAPIView
+from .serialization import *
+from ...models import *
 
+class NoteReadApiView(generics.ListAPIView):
+    queryset = Note.objects.all()
+    serializer_class = NoteSerializer
+    permissions = IsAuthenticated
 
+class NoteDetailApiView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Note.objects.all()
+    serializer_class = NoteSerializer
+    permissions = IsAuthenticated
