@@ -14,7 +14,7 @@ from django.core.mail import send_mail
 from rest_framework.generics import CreateAPIView
 from .serialization import *
 from ...models import *
-
+from .permissions import IsTeacherPermission
 class NoteReadApiView(generics.ListAPIView):
     queryset = Note.objects.all()
     serializer_class = NoteSerializer
@@ -23,4 +23,5 @@ class NoteReadApiView(generics.ListAPIView):
 class NoteDetailApiView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Note.objects.all()
     serializer_class = NoteSerializer
-    permissions = IsAuthenticated
+    permission_classes  = [IsTeacherPermission]
+

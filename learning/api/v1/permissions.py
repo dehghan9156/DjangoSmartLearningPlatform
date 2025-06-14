@@ -10,3 +10,5 @@ class IsTeacherPermission(permissions.BasePermission):
         return bool(request.user and
                     request.user.is_authenticated and
                     getattr(request.user,'role',None)=="teacher")
+
+
