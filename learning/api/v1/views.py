@@ -15,10 +15,18 @@ from rest_framework.generics import CreateAPIView
 from .serialization import *
 from ...models import *
 from .permissions import IsTeacherPermission
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import filters
+
+
 class NoteReadApiView(generics.ListAPIView):
     queryset = Note.objects.all()
     serializer_class = NoteSerializer
     permissions = IsAuthenticated
+    filter_backends = [DjangoFilterBackend,filters.SearchFilter,filters.OrderingFilter]
+    filterset_fields = ['id']
+    search_fields = ['id','title','content']
+    order_fields = ['id']
 
 class NoteDetailApiView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Note.objects.all()

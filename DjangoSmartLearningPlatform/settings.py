@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     'channels',
     'rest_framework',
     'drf_yasg',
+    'django_filters',
 ]
 
 MIDDLEWARE = [
@@ -181,4 +182,7 @@ CHANNEL_LAYERS = {
 
 ACCOUNT_FORMS = {
     'signup': 'coreusers.forms.CustomSignupForm',
+}
+REST_FRAMEWORK = {
+    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend']
 }
