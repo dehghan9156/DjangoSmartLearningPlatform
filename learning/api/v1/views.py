@@ -74,3 +74,68 @@ class NoteSummaryApiView(APIView):
                 return "⚠️ Unexpected response from DeepSeek."
         except Exception as e:
             return f"❌ Error communicating with DeepSeek: {str(e)}"
+
+
+class NoteQuestionGPTApiView(APIView):
+    def post(self,request,pk):
+        try:
+            note = Note.objects.get(pk=pk)
+        except Note.DoesNotExist:
+            return Response({"messages": "note does not exist"},status=status.HTTP_404_NOT_FOUND)
+        try:
+            lst_question = []
+            questions_text = self.call_deepseek(note.content)
+            blocks = questions_text.strip().split('\n\n')
+            for block in blocks:
+                que=block.strip().split('\n')
+                lst_question.append(que)
+            return Response({"questions":lst_question,"messages":"question successfully created."},status=status.HTTP_200_OK)
+        except ConnectionError:
+            return Response({"messages":"connection failed.sorry"},status=status.HTTP_503_SERVICE_UNAVAILABLE)
+    def call_deepseek(self, prompt):
+        url = "https://api.openai.com/v1/chat/completions"
+        api_key = settings.OPENAI_API_KEY
+        headers = {
+            "Authorization": f"Bearer {api_key}",
+            "Content-Type": "application/json"
+        }
+        data = {
+            "model": "gpt-4o-mini",
+            "messages": [{
+                "role": "user",
+                "content": f"""The following is a user note:
+                        ---
+                        {prompt}
+                        ---
+
+
+                        Based on the above note, generate four multiple-choice test questions. For each question:
+                        - Provide four options labeled A, B, C, and D.
+                        - Clearly indicate the correct answer at the end of each question in the format: Answer: X (e.g., Answer: B)
+                        - Do not provide any explanation or reasoning.
+
+                        Output format:
+                        1. [Question text]
+                        A) ...
+                        B) ...
+                        C) ...
+                        D) ...
+                        Answer: [correct option letter]
+                        ...
+                        """
+            }],
+
+            "temperature": 0.7
+        }
+
+        try:
+            response = requests.post(url, headers=headers, json=data)
+            response.raise_for_status()  # اگر وضعیت 4xx یا 5xx باشه خطا می‌ندازه
+            result = response.json()
+
+            if "choices" in result:
+                return result["choices"][0]["message"]["content"]
+            else:
+                return "⚠️ Unexpected response from DeepSeek."
+        except Exception as e:
+            return f"❌ Error communicating with DeepSeek: {str(e)}"
