@@ -1,7 +1,7 @@
 from http.client import responses
-import jwt
 from django.conf import settings
 from django.core.serializers import serialize
+from django.db.models.fields import return_None
 from django.shortcuts import get_object_or_404
 from django.template.context_processors import request
 from rest_framework import generics
@@ -17,19 +17,60 @@ from ...models import *
 from .permissions import IsTeacherPermission
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
+import requests
 
 
 class NoteReadApiView(generics.ListAPIView):
     queryset = Note.objects.all()
     serializer_class = NoteSerializer
     permissions = IsAuthenticated
-    filter_backends = [DjangoFilterBackend,filters.SearchFilter,filters.OrderingFilter]
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
     filterset_fields = ['id']
-    search_fields = ['id','title','content']
+    search_fields = ['id', 'title', 'content']
     order_fields = ['id']
+
 
 class NoteDetailApiView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Note.objects.all()
     serializer_class = NoteSerializer
-    permission_classes  = [IsTeacherPermission]
+    permission_classes = [IsTeacherPermission]
 
+
+class NoteSummaryApiView(APIView):
+    def post(self, request, pk):
+        try:
+            note = Note.objects.get(pk=pk)
+        except Note.DoesNotExist:
+            return Response({"error": "note does not exit."}, status=status.HTTP_404_NOT_FOUND)
+
+        try:
+            summary = self.call_deepseek(note.content)
+            return Response(summary, status=status.HTTP_200_OK)
+        except ConnectionError:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
+    def call_deepseek(self, prompt):
+        url = "https://api.openai.com/v1/chat/completions"
+        api_key = settings.OPENAI_API_KEY
+        headers = {
+            "Authorization": f"Bearer {api_key}",
+            "Content-Type": "application/json"
+        }
+        data = {
+            "model": "gpt-4o-mini",
+            "messages": [{"role": "user",
+                          "content": f"Please summarize this text in the same language as the input:\n{prompt}"}],
+            "temperature": 0.7
+        }
+
+        try:
+            response = requests.post(url, headers=headers, json=data)
+            response.raise_for_status()  # اگر وضعیت 4xx یا 5xx باشه خطا می‌ندازه
+            result = response.json()
+
+            if "choices" in result:
+                return result["choices"][0]["message"]["content"]
+            else:
+                return "⚠️ Unexpected response from DeepSeek."
+        except Exception as e:
+            return f"❌ Error communicating with DeepSeek: {str(e)}"
