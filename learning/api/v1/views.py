@@ -76,7 +76,7 @@ class NoteSummaryApiView(APIView):
             return f"❌ Error communicating with DeepSeek: {str(e)}"
 
 
-class NoteQuestionGPTApiView(APIView):
+class NoteCreateQuestionGPTApiView(APIView):
     def post(self,request,pk):
         try:
             note = Note.objects.get(pk=pk)
@@ -85,13 +85,16 @@ class NoteQuestionGPTApiView(APIView):
         try:
             lst_question = []
             questions_text = self.call_deepseek(note.content)
+            # print("question_text",questions_text)
             blocks = questions_text.strip().split('\n\n')
+            # print("blocks",blocks)
             for block in blocks:
                 que=block.strip().split('\n')
                 lst_question.append(que)
             return Response({"questions":lst_question,"messages":"question successfully created."},status=status.HTTP_200_OK)
         except ConnectionError:
             return Response({"messages":"connection failed.sorry"},status=status.HTTP_503_SERVICE_UNAVAILABLE)
+        
     def call_deepseek(self, prompt):
         url = "https://api.openai.com/v1/chat/completions"
         api_key = settings.OPENAI_API_KEY
