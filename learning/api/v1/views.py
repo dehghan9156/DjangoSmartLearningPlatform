@@ -11,7 +11,7 @@ from rest_framework.views import APIView
 from rest_framework import permissions
 from rest_framework.permissions import IsAuthenticated
 from django.core.mail import send_mail
-from rest_framework.generics import CreateAPIView
+from rest_framework.generics import CreateAPIView,GenericAPIView
 from .serialization import *
 from ...models import *
 from .permissions import IsTeacherPermission
@@ -126,6 +126,58 @@ class NoteCreateQuestionGPTApiView(APIView):
                         Answer: [correct option letter]
                         ...
                         """
+            }],
+
+            "temperature": 0.7
+        }
+
+        try:
+            response = requests.post(url, headers=headers, json=data)
+            response.raise_for_status()  # اگر وضعیت 4xx یا 5xx باشه خطا می‌ندازه
+            result = response.json()
+
+            if "choices" in result:
+                return result["choices"][0]["message"]["content"]
+            else:
+                return "⚠️ Unexpected response from DeepSeek."
+        except Exception as e:
+            return f"❌ Error communicating with DeepSeek: {str(e)}"
+
+class NoteAskQuestionGptApiView(generics.GenericAPIView):
+    serializer_class = QuestionNoteSerializer
+    def post(self,request,pk):
+        serializer = self.serializer_class(data=request.data)
+        if serializer.is_valid():
+            try :
+                note = Note.objects.get(pk=pk)
+                question = serializer.validated_data['question']
+                ans_gpt = self.call_deepseek(question,note)
+                return Response(ans_gpt,status=status.HTTP_200_OK)
+            except Note.DoesNotExist:
+                return Response(status=status.HTTP_501_NOT_IMPLEMENTED)
+        else:
+            print({"message":"serializer is not valid."})
+     
+        
+    def call_deepseek(self, question, prompt):
+        url = "https://api.openai.com/v1/chat/completions"
+        api_key = settings.OPENAI_API_KEY
+        headers = {
+            "Authorization": f"Bearer {api_key}",
+            "Content-Type": "application/json"
+        }
+        data = {
+            "model": "gpt-4o-mini",
+            "messages": [{
+                "role": "user",
+                "content": f"""The following is a user note:
+                    ---
+                    {prompt}
+                    ---
+                    
+                    Now, answer this question based **only** on the content above:
+                    {question}
+                    """
             }],
 
             "temperature": 0.7

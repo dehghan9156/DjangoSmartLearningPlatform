@@ -10,3 +10,7 @@ class NoteSerializer(serializers.ModelSerializer):
     class Meta:
         model = Note
         fields = ["id","title","content","created_by","created_date"]
+
+
+class QuestionNoteSerializer(serializers.Serializer):
+    question = serializers.CharField(max_length=200)
