@@ -194,3 +194,13 @@ class NoteAskQuestionGptApiView(generics.GenericAPIView):
                 return "⚠️ Unexpected response from DeepSeek."
         except Exception as e:
             return f"❌ Error communicating with DeepSeek: {str(e)}"
+
+
+class ExamSelectApiView(generics.RetrieveAPIView):
+    def get(self,request,pk):
+        question = Question.objects.filter(note=pk)
+        permissions =IsAuthenticated
+        serializer = QuestionSerializer(question,many=True)
+        return Response(serializer.data)   
+
+    

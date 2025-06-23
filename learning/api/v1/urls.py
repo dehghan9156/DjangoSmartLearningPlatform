@@ -10,4 +10,6 @@ urlpatterns = [
     path("note/summary/<int:pk>/",views.NoteSummaryApiView.as_view(),name="note-summary"),
     path("note/create-question/by/gpt/<int:pk>/",views.NoteCreateQuestionGPTApiView.as_view(),name="note-create-question"),
     path("note/ask-question/gpt/<int:pk>/",views.NoteAskQuestionGptApiView.as_view(),name="note-ask-question"),
+    path("exam/select/<int:pk>/",views.ExamSelectApiView.as_view(),name="exam-select"),
+
 ]
